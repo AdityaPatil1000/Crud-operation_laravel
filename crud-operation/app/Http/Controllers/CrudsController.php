@@ -18,6 +18,9 @@ class CrudsController extends Controller
     public function index()
     {
         //
+        $cruds = Crud::all();  
+  
+        return view('index', compact('cruds')); 
     }
 
     /**
@@ -66,6 +69,10 @@ class CrudsController extends Controller
     public function edit(string $id)
     {
         //
+        $crud= Crud::find($id);  
+        return view('edit', compact('crud'));  
+
+        
     }
 
     /**
@@ -73,7 +80,25 @@ class CrudsController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+        
         //
+        $request->validate([  
+            'first_name'=>'required',  
+            'last_name'=>'required',  
+            'gender'=>'required',  
+            'qualifications'=>'required'  
+        ]);  
+  
+        $crud= Crud::find($id);   
+        $crud->first_name =  $request->get('first_name');  
+        $crud->last_name = $request->get('last_name');  
+        $crud->qualifications = $request->get('qualifications');  
+        $crud->gender = $request->get('gender');  
+        $crud->save();  
+
+        
+        return view('edit', compact('crud'));  
     }
 
     /**
@@ -82,5 +107,7 @@ class CrudsController extends Controller
     public function destroy(string $id)
     {
         //
+        $crud=Crud::find($id);  
+        $crud->delete();  
     }
 }
